@@ -1,14 +1,19 @@
 {
-  "name": "leoholds-v",
+  "name": "leoholds",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.4",
+    "axios": "^0.21.1",
+    "contentful": "^8.1.7",
+    "graphql": "^15.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "redux-promise": "^0.6.0",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
@@ -34,5 +39,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-sass": "^5.0.0",
+    "sass-loader": "^11.0.1"
   }
 }

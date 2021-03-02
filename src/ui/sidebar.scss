@@ -1,0 +1,32 @@
+aside {
+  width: 200px;
+  padding-right: 24px;
+  h1 {
+    border-bottom: var(--border-line);
+    padding-bottom: 16px;
+  }
+
+  li {
+    line-height: 32px;
+    background-image: url("http://leoholds.com/img/icon_aside_a.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    border-bottom: var(--border-line);
+    padding-left: 16px;
+
+    a {
+      color: var(--color-text);
+      line-height: 30px;
+      white-space: nowrap;
+      text-decoration: none;
+      &.active {
+        color: var(--color-active);
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// http://leoholds.com/img/icon_aside_a.png

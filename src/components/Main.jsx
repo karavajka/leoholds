@@ -1,13 +1,14 @@
-import { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-class Main extends Component {
-  render() {
-    return (
-      <div>
-        Main
-      </div>
+function Main() {
+  const [page, setPage] = useState([]);
+
+  useEffect(() => {
+  }, []);
+
+    return(
+      <div>Main</div>
     )
-  }
 }
 
 export default Main;

@@ -5,10 +5,10 @@ const Set = types
     isLoading: false,
     id: types.optional(types.identifier, "set"),
     title: types.maybeNull(types.string),
-    imageCollection: types.frozen(),
+    imagesCollection: types.frozen(),
     // imageList: types.optional(types.array(types.string), []),
     price: types.maybeNull(types.number),
-    priceOptionsText: types.maybeNull(types.string),
+    priceOptions: types.maybeNull(types.string),
     description: types.maybeNull(types.string),
   })
   .actions(self => ({

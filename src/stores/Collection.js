@@ -4,25 +4,6 @@ const API_BASE_URL = 'https://graphql.contentful.com';
 const API_SPACE_ID = 'fvvee9f7jis0';
 const API_TOKEN = 'pegKIqK-Acqf8h9fn8nYNKcWn9_7GMN47QiWTYtpJpQ';
 
-const query = `
-  {
-    structureCollection {
-      items {
-        id
-        title
-        imageCollection {
-          items {
-            url
-          }
-        }
-        price
-        priceOptionsText
-        description
-      }
-    }
-  }
-`
-
 const Collection = types
   .model("Collection", {
     isLoading: types.optional(types.boolean, false),
@@ -33,8 +14,12 @@ const Collection = types
 
     async fetchCollection(idCollection) {
       const { sets_db } = getRoot(self);
+
       self.isLoading = true;
       self.id = idCollection;
+
+      const queryParam = self.makeQueryParam(idCollection);
+      const query =  self.makeQuery(queryParam);
 
       const response = await fetch(`${API_BASE_URL}/content/v1/spaces/${API_SPACE_ID}/`, {
         method: "POST",
@@ -48,8 +33,12 @@ const Collection = types
       if (response.ok) {
         const { data } = await response.json();
 
-        console.log("data:", data.structureCollection.items)
-        data.structureCollection.items.forEach(item => {
+        console.log("data:", data)
+        let itemsArray;
+        if(queryParam === 'structureCollection') itemsArray = data.structureCollection.items;
+        if(queryParam === 'lSetCollection') itemsArray = data.lSetCollection.items;
+        
+        itemsArray.forEach(item => {
           sets_db.put(item);
           self.pushToList(item.id);
         });
@@ -65,7 +54,33 @@ const Collection = types
       self.isLoading = false;
     },
 
+    makeQueryParam(type) {
+      if(type === 'structures') return 'structureCollection';
+      if(type === 'lcollection') return 'lSetCollection';
+    },
+
+    makeQuery(queryParam) {
+      return `
+              {
+                ${queryParam} {
+                  items {
+                    id
+                    title
+                    imagesCollection {
+                      items {
+                        url
+                      }
+                    }
+                    price
+                    priceOptions
+                    description
+                  }
+                }
+              }
+            `
+    }
+
   }))
   .views(self => ({}));
 
-  export { Collection };
+export { Collection };

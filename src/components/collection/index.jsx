@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import { observer, inject } from "mobx-react";
 
 const SetCard = ({set}) => (
-  <div>
-    <div>
-      <img src={set.imageCollection.items[0].url} alt={set.tittle} />
+  <article className="collection-card">
+    <div className="collection-card--content">
+      <div className="collection-card__image-wrapper">
+        <div className="collection-card__image">
+          <img src={set.imagesCollection.items[0].url} alt={set.tittle} />
+        </div>
+      </div>
+        <div className="collection-card__title"><h3>{set.title}</h3></div>
+        <div>{set.price} грн</div>
+        <div>Цена за набор</div>
+        <button type="button">Купить</button>
+        {set.priceOptions && <div>купить поштучно >></div>}
     </div>
-    <div>
-      <div>{set.title}</div>
-      <div>{set.price} грн</div>
-    </div>
-  </div>
+  </article>
 )
 
 const Collection = (props) => {
@@ -28,9 +33,12 @@ const Collection = (props) => {
   const setsList = props.sets_db.byIds(props.collection.listIds);
 
   return(
-    <div>Collection
-      {setsList.map((set, index) => <SetCard key={index} set={set} />)}
-    </div>
+    <>
+      <h1>Collection</h1>
+      <div className="collection-content">
+        {setsList.map((set, index) => <SetCard key={index} set={set} />)}
+      </div>
+    </>
   )
 }
 

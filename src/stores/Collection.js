@@ -16,38 +16,46 @@ const Collection = types
       const { sets_db } = getRoot(self);
 
       self.isLoading = true;
-      self.id = idCollection;
+      
+      if(idCollection !== self.id) {
+        self.clearListIds();
+        self.id = idCollection;
 
-      const queryParam = self.makeQueryParam(idCollection);
-      const query =  self.makeQuery(queryParam);
+        const queryParam = self.makeQueryParam(idCollection);
+        const query =  self.makeQuery(queryParam);
 
-      const response = await fetch(`${API_BASE_URL}/content/v1/spaces/${API_SPACE_ID}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${API_TOKEN}`,
-        },
-        body: JSON.stringify({ query }),
-      })
-  
-      if (response.ok) {
-        const { data } = await response.json();
+        const response = await fetch(`${API_BASE_URL}/content/v1/spaces/${API_SPACE_ID}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_TOKEN}`,
+          },
+          body: JSON.stringify({ query }),
+        })
+    
+        if (response.ok) {
+          const { data } = await response.json();
 
-        console.log("data:", data)
-        let itemsArray;
-        if(queryParam === 'structureCollection') itemsArray = data.structureCollection.items;
-        if(queryParam === 'lSetCollection') itemsArray = data.lSetCollection.items;
-        
-        itemsArray.forEach(item => {
-          sets_db.put(item);
-          self.pushToList(item.id);
-        });
+          console.log("data:", data)
+          let itemsArray;
+          if(queryParam === 'structureCollection') itemsArray = data.structureCollection.items;
+          if(queryParam === 'lSetCollection') itemsArray = data.lSetCollection.items;
+          
+          itemsArray.forEach(item => {
+            sets_db.put(item);
+            self.pushToList(item.id);
+          });
+        }
       }
       self.stopLoading()
     },
 
     pushToList(id) {
       self.listIds.push(id);
+    },
+
+    clearListIds() {
+      self.listIds = [];
     },
 
     stopLoading() {

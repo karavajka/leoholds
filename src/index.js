@@ -12,11 +12,12 @@ import { createStores } from "./stores/bootstrap";
 const history = createBrowserHistory();
 
 const stores = createStores({ history });
+window.STORES = stores;
 
 const app = (
   <Provider {...stores}>
     <BrowserRouter history={history}>
-      <App />
+      <App stores={stores} />
     </BrowserRouter>
   </Provider>
 );

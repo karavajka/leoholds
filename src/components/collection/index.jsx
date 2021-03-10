@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { observer, inject } from "mobx-react";
 
 const SetCard = ({set}) => (
@@ -19,8 +19,7 @@ const SetCard = ({set}) => (
 )
 
 const Collection = (props) => {
-  // const [page, setPage] = useState([]);
-
+ 
   useEffect(() => {
     const idCollection = props.match.params.idCollection;
     props.collection.fetchCollection(idCollection);

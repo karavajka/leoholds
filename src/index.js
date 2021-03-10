@@ -2,17 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router as BrowserRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import { Provider } from "mobx-react";
 
 import '../src/ui/index.scss';
 import App from './App';
+import { createStores } from "./stores/bootstrap";
 // import reportWebVitals from './reportWebVitals';
 
 const history = createBrowserHistory();
 
+const stores = createStores({ history });
+window.STORES = stores;
+
 const app = (
+  <Provider {...stores}>
     <BrowserRouter history={history}>
-      <App />
+      <App stores={stores} />
     </BrowserRouter>
+  </Provider>
 );
 
 ReactDOM.render(app, document.getElementById("root"));

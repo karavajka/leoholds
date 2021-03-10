@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+
+import React, { useEffect } from "react";
+import { withRouter, matchPath } from "react-router-dom";
+
 import Routes from './routes';
+import { ROUTES} from "./utils/constants";
+import * as mountApi from "./routes/routerApiMount";
+import * as unmountApi from "./routes/routerApiUnmount";
 
-// async function fetchPage() {
-//   let response = await fetch(`${API_BASE_URL}/content/v1/spaces/${API_SPACE_ID}/`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${API_TOKEN}`,
-//     },
-//     body: JSON.stringify({ query }),
-//   });
+const route = (pathname, loader, exact = false) => [
+  {
+    path: pathname,
+    exact
+  },
+  loader
+];
 
-//   let commits = await response.json();
-//   return commits.data.pageCollection.items[0];
-// }
+const routes = [
+  route(ROUTES.collectionPage, mountApi.getCollectionPage),
+]
 
-function App() {
-  return (
-      <Routes />
-  );
+const App = ({ history, stores }) => {
+  function mount() {
+    for (const [config, load] of routes) {
+      const match = matchPath(history.location.pathname, config);
+      if (match) {
+        load(stores, match);
+
+        return () => {
+          unmountApi[load.name] && unmountApi[load.name](stores, match);
+        };
+      }
+    }
+  }
+
+  useEffect(mount, [history.location.key]);
+
+  return <Routes />
 }
 
-export default App;
+export default withRouter(App);

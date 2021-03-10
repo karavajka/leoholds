@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from 'react-router-dom'
 
+// https://vast-temple-42123.herokuapp.com/
+
 const Header = () => (
   <>
     <header>
@@ -20,9 +22,11 @@ const Header = () => (
               Home</NavLink>
             </li>
             <li>
-              <NavLink to="/main" className="header-link">
-              Main</NavLink>
+              <NavLink to="/collections/structures" className="header-link">Рельефы</NavLink>
             </li>
+            <li>
+              <NavLink to="/collections/lcollection" className="header-link">Большие</NavLink>
+              </li>
           </ul>
         </div>
         <div className="right">

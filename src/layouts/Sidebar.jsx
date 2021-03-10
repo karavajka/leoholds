@@ -9,7 +9,10 @@ const Sidebar = () => (
       <NavLink to="/" exact>Home</NavLink>
       </li>
       <li>
-        <NavLink to="/main">Main</NavLink>
+        <NavLink to="/collections/lcollection">Большие</NavLink>
+      </li>
+      <li>
+        <NavLink to="/collections/structures">Рельефы</NavLink>
       </li>
     </ul>
   </aside>

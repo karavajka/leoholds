@@ -1,0 +1,44 @@
+.collection-content {
+  @extend .display-flex;
+  @extend .flex-wrap;
+  width: 100%;
+}
+.collection-card {
+  width: 25%;
+  padding: 8px;
+  &--content {
+  }
+
+  &__image-wrapper {
+    position: relative;
+    background-color: white;
+    border: var(--border-simple);
+    padding-bottom: 100%;
+  }
+
+  &__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 4px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__title {
+    color: white;
+    text-align: center;
+    background: var(--color-dark-text);
+    padding: 4px;
+  }
+
+  @media screen and (min-width: 1025px) {
+    padding: 16px;
+  }
+}

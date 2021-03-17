@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { Link} from 'react-router-dom';
 import { observer, inject } from "mobx-react";
 
-const SetCard = ({set}) => (
+const SetCard = ({set, collectionId}) => (
   <article className="collection-card">
-    <div className="collection-card--content">
+    <Link to={`/collections/${collectionId}/set/${set.id}`} className="collection-card--content">
       <div className="collection-card__image-wrapper">
         <div className="collection-card__image">
           <img src={set.imagesCollection.items[0].url} alt={set.tittle} />
@@ -14,7 +15,7 @@ const SetCard = ({set}) => (
         <div>Цена за набор</div>
         <button type="button">Купить</button>
         {set.priceOptions && <div>купить поштучно >></div>}
-    </div>
+    </Link>
   </article>
 )
 
@@ -35,7 +36,7 @@ const Collection = (props) => {
     <>
       <h1>Collection</h1>
       <div className="collection-content">
-        {setsList.map((set, index) => <SetCard key={index} set={set} />)}
+        {setsList.map((set, index) => <SetCard key={index} set={set} collectionId={props.collection.id} />)}
       </div>
     </>
   )

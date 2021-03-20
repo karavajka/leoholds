@@ -29,10 +29,10 @@ nav {
   height: 40px;
   background-color: var(--color-active);
   .wrapper {
-    @extend .display-flex;
+    @include display-flex;
   }
   ul {
-    @extend .display-flex;
+    @include display-flex;
     padding: 4px 0;
   }
   .right {

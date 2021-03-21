@@ -9,7 +9,7 @@
 
   &__image-wrapper {
     width: 400px;
-    height: 400px;
+    max-height: 400px;
     padding: 4px;
     border: var(--border-simple);
     overflow: hidden;
@@ -30,6 +30,10 @@
     }
     &--price-option {
       padding-bottom: 16px;
+
+      .error {
+        color: red;
+      }
     }
   }
 }

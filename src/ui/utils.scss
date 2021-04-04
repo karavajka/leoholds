@@ -1,7 +1,25 @@
-.display-flex {
+@mixin transition($property) {
+  -webkit-transition: $property;
+  -o-transition: $property;
+  transition: $property;
+}
+
+@mixin ellipsis-text {
+  width: 100%;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin display-flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.display-flex {
+  @include display-flex;
 }
 
 .space-between {

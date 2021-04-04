@@ -1,0 +1,52 @@
+.hidden-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  -webkit-clip-path: inset(100%);
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.price-checkbox-label {
+  @include transition(var(--transition-default));
+  display: inline-block;
+  width: 48px;
+  height: 40px;
+  color: var(--color-text);
+  line-height: 38px;
+  text-align: center;
+  border: var(--border-simple);
+  border-radius: 2px;
+  padding: 0;
+  margin: 8px 8px 0 0;
+  outline: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+    border-color: var(--color-active-hover);
+  }
+}
+
+.hidden-input:checked + .price-checkbox-label {
+  color: var(--color-dark-text);
+  background: white;
+  border-color: var(--color-active-hover);
+}
+
+.btn-checkbox-label {
+  @extend .price-checkbox-label;
+  width: auto;
+  white-space: nowrap;
+  padding: 0 8px;
+  &.active {
+    color: var(--color-dark-text);
+    background: white;
+    border-color: var(--color-active-hover);
+  }
+}

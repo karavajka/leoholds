@@ -18,6 +18,11 @@ code {
 * {
   box-sizing: border-box;
 }
+fieldset {
+  padding: 0;
+  border: none;
+}
+
 h1,
 h2,
 h3 {
@@ -37,6 +42,17 @@ ul {
   margin: 0;
 }
 
+button {
+  @include transition(var(--transition-default));
+  width: auto;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
 .wrapper {
   max-width: 100%;
   padding: 0 24px;
@@ -45,6 +61,7 @@ ul {
   .right {
     width: 50%;
   }
+
   @media screen and (min-width: 1025px) {
     width: 1000px;
     padding: 0;
@@ -52,7 +69,7 @@ ul {
 }
 
 .content {
-  @extend .display-flex;
+  @include display-flex;
   min-height: calc(100vh - 232px); // 232px: 160px - header, 72px - footer
   padding: 24px;
 
@@ -61,5 +78,18 @@ ul {
   }
   @media screen and (min-width: 1025px) {
     padding: 40px 0;
+  }
+}
+
+.btn-primary {
+  height: 32px;
+  color: white;
+  background: var(--color-active);
+  border-radius: 2px;
+  border: 1px solid var(--color-active-hover);
+  padding: 0 16px;
+
+  &:hover {
+    background: var(--color-active-hover);
   }
 }

@@ -1,0 +1,39 @@
+.set {
+  h1 {
+    line-height: 2;
+  }
+
+  &__content {
+    @include display-flex;
+  }
+
+  &__image-wrapper {
+    width: 400px;
+    max-height: 400px;
+    padding: 4px;
+    border: var(--border-simple);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__info {
+    padding-left: 16px;
+
+    &--price {
+      font-weight: 600;
+      padding-bottom: 16px;
+    }
+    &--price-option {
+      padding-bottom: 16px;
+
+      .error {
+        color: red;
+      }
+    }
+  }
+}

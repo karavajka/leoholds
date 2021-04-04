@@ -1,5 +1,5 @@
 .collection-content {
-  @extend .display-flex;
+  @include display-flex;
   @extend .flex-wrap;
   width: 100%;
 }

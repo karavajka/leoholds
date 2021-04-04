@@ -1,7 +1,9 @@
 @import "./variables.scss";
-@import "./basic.scss";
 @import "./utils.scss";
-@import "./header.scss";
-@import "./sidebar.scss";
-@import "./footer.scss";
+@import "./basic.scss";
+@import "./components//input.scss";
+@import "./components/header.scss";
+@import "./components/sidebar.scss";
+@import "./components/footer.scss";
 @import "./components/collection.scss";
+@import "./components/set.scss";

@@ -9,6 +9,7 @@ const Collection = types
     isLoading: types.optional(types.boolean, false),
     id: types.maybeNull(types.string),
     listIds: types.optional(types.array(types.string), []),
+    errors: types.optional(types.boolean, false),
   })
   .actions(self => ({
 
@@ -16,6 +17,7 @@ const Collection = types
       const { sets_db } = getRoot(self);
 
       self.isLoading = true;
+      self.errors = false;
       
       if(idCollection !== self.id) {
         self.clearListIds();
@@ -45,9 +47,10 @@ const Collection = types
             sets_db.put(item);
             self.pushToList(item.id);
           });
-        }
+        } else self.setErrors();
+        
       }
-      self.stopLoading()
+      self.stopLoading();
     },
 
     pushToList(id) {
@@ -60,6 +63,10 @@ const Collection = types
 
     stopLoading() {
       self.isLoading = false;
+    },
+
+    setErrors() {
+      self.errors = true;
     },
 
     makeQueryParam(type) {

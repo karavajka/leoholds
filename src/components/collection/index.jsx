@@ -27,9 +27,8 @@ const Collection = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (props.collection.isLoading) {
-    return 'Loading...'
-  }
+  if (props.collection.isLoading) return 'Loading...'
+  if (!props.collection.isLoading && props.collection.errors) return 'Not found'
 
   const setsList = props.sets_db.byIds(props.collection.listIds);
 

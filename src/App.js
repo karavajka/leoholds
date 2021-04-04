@@ -15,6 +15,7 @@ const route = (pathname, loader, exact = false) => [
 ];
 
 const routes = [
+  route(ROUTES.setPage, mountApi.getSetPage),
   route(ROUTES.collectionPage, mountApi.getCollectionPage),
 ]
 
@@ -32,7 +33,7 @@ const App = ({ history, stores }) => {
     }
   }
 
-  useEffect(mount, [history.location.key]);
+  useEffect(mount, [mount]);
 
   return <Routes />
 }

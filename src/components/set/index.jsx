@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { observer, inject } from "mobx-react";
 
 const PriceCheckbox = ({option, index, onSetSelectedAll, isSelectedAll, onSelectedPriceOptions}) => {
@@ -32,11 +32,7 @@ const SetPage = (props) => {
   const [isSelectedAll, setSelectedAll] = useState(false);
   const [selectedPriceOptions, setSelectedPriceOptions] = useState([]);
   const [isError, setIsError] = useState(false);
-  
-  useEffect(() => {
-  }, []);
-  console.log(props);
-
+ 
   function onSetSelectedAll(value) {
     setSelectedAll(value);
   }
@@ -89,10 +85,12 @@ const SetPage = (props) => {
   }
 
   const set = props.sets_db.get(props.match.params.id);
+
+  if (props.collection.isLoading) return 'Loading...'
+
+  if(!set && !props.collection.isLoading) return 'Not found'
+
   const arrayOfPriceOptions = set.priceOptions && set.priceOptions.split(', ');
-
-
-  console.log('set', set);
 
     return(
       <div className="set">
@@ -130,4 +128,4 @@ const SetPage = (props) => {
     )
 }
 
-export default inject("sets_db")(observer(SetPage));
+export default inject("sets_db", "collection")(observer(SetPage));

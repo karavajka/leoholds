@@ -32,7 +32,7 @@ const Collection = types
           },
           body: JSON.stringify({ query }),
         })
-    
+
         if (response.ok) {
           const { data } = await response.json();
 

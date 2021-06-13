@@ -6,6 +6,7 @@ const RootStore = types.model("RootStore", {
   set: types.optional(Stores.Set, {}),
   sets_db: types.optional(Stores.SetsDB, {}),
   collection: types.optional(Stores.Collection, {}),
+  cart: types.optional(Stores.Cart, {}),
 });
 
 function createStores({ snapshot, ...deps }): IRootStoreType {

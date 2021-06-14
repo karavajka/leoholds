@@ -8,6 +8,11 @@ const Item = types
   link: types.frozen(),
   image: types.frozen(),
 })
+.actions(self => ({
+  putOptions(options) {
+    self.priceOptions = options
+  }
+}))
 
 
 const Cart = types
@@ -23,7 +28,17 @@ const Cart = types
       return self.itemsList.push(item);
     },
 
-    deleteFromCart() {} 
+    deleteFromCart(itemIndex, optionNumber) {
+
+      const options = self.itemsList[itemIndex].priceOptions.filter(
+        ({ number }) => number !== optionNumber
+      );
+
+      console.log('options:', options)
+
+      self.itemsList[itemIndex].putOptions(options)
+    },
+
 
   })).views(self => ({}));
 

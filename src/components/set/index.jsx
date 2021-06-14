@@ -1,49 +1,40 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import { observer, inject } from 'mobx-react';
+
+import { is } from '../../utils/global';
 
 const PriceCheckbox = ({
   option,
   index,
-  onSetSelectedAll,
+  setSelectedAll,
   isSelectedAll,
   onSelectedPriceOptions,
   selectedPriceOptions,
+  removeError,
 }) => {
-  const [isSelected, setSelected] = useState(false);
-
-  useEffect(() => {
-    if (
-      selectedPriceOptions.find(
-        (selectedOption) => option.number === selectedOption.number
-      )
-    )
-      return setSelected(true);
-
-    if (selectedPriceOptions.length === 0) setSelected(false);
-  }, [selectedPriceOptions, option]);
-
   function onCheckOption(e) {
-    console.log(e.target.dataset.price, e.target.checked);
     const { price, number } = e.target.dataset;
+    removeError();
 
-    if (!e.target.checked && isSelectedAll) onSetSelectedAll(false);
+    if (isSelectedAll) setSelectedAll(false);
 
-    setSelected(!isSelected);
-    onSelectedPriceOptions({ number: number, price: price });
+    onSelectedPriceOptions({ number: number, price: price, amount: 1 });
   }
 
   return (
     <>
       <input
         className="hidden-input"
-        type="checkbox"
+        type="radio"
         id={`${option}-${index}`}
         data-price={option}
         data-number={index + 1}
+        value={option}
+        name="option"
         onChange={onCheckOption}
-        checked={isSelectedAll || isSelected}
+        defaultChecked={isSelectedAll && false}
       />
-      <label className="price-checkbox-label" htmlFor={`${option}-${index}`}>
+      <label className={`price-checkbox-label`} htmlFor={`${option}-${index}`}>
         {index + 1}
       </label>
     </>
@@ -55,70 +46,61 @@ const SetPage = (props) => {
   const [selectedPriceOptions, setSelectedPriceOptions] = useState([]);
   const [isError, setIsError] = useState(false);
 
-  function onSetSelectedAll(value) {
-    setSelectedAll(value);
-  }
-
-  function toggleSelestedAll() {
-    setSelectedAll(!isSelectedAll);
+  function removeError() {
     setIsError(false);
   }
 
   function onSelectedPriceOptions(value) {
     setIsError(false);
-    let existingPriceOptions = [];
-
-    if (selectedPriceOptions.find((option) => option.number === value.number)) {
-      existingPriceOptions = selectedPriceOptions.filter(
-        (option) => option.number !== value.number
-      );
-
-      return setSelectedPriceOptions(existingPriceOptions);
-    }
-
-    existingPriceOptions = [...selectedPriceOptions, value];
-    setSelectedPriceOptions(existingPriceOptions);
+    setSelectedPriceOptions(value);
   }
 
   function getPriceValue(set) {
-    if (isSelectedAll) return `${set.price} за весь набір`;
-    if (!isSelectedAll && selectedPriceOptions.length === 0)
-      return `${set.price} за набір`;
+    if (isSelectedAll) return `${set.price} грн. за весь набір`;
+    if (!isSelectedAll && is(selectedPriceOptions.length, 0))
+      return `${set.price} грн.`;
     if (!isSelectedAll) {
-      let sum = 0;
-      selectedPriceOptions.forEach((option) => {
-        sum = sum + +option.price;
-      });
-      return sum;
+      return `${selectedPriceOptions.price} грн. за зачіпку`;
     }
   }
 
   function onSubmit() {
     const link = props.location.pathname;
     const set = props.sets_db.get(props.match.params.id);
-    const priceOptions =
-      !set.priceOptions || (set.priceOptions && isSelectedAll)
-        ? [{ number: 'all', price: set.price }]
-        : selectedPriceOptions;
+    const priceOptions = !set.priceOptions
+      ? { number: 'all', price: set.price, amount: 1 }
+      : selectedPriceOptions;
 
-    if (priceOptions.length > 0) {
+    if (priceOptions.number) {
       const data = {
         id: set.id,
-        priceOptions: priceOptions,
+        priceOptions: [priceOptions],
         image: set.imagesCollection.items[0].url,
         link: link,
         title: set.title,
       };
-      console.log('submit data:', data);
+
       props.cart.addToCart(data);
       clearInputs();
     } else setIsError(true);
   }
 
   function clearInputs() {
-    let priceOptions = [];
-    setSelectedPriceOptions([...priceOptions]);
-    setSelectedAll(false);
+    setSelectedPriceOptions([]);
+  }
+
+  function onCheckOption(e) {
+    const { price, number } = e.target.dataset;
+
+    if (is(number, 'clear-options')) {
+      isSelectedAll && setSelectedAll(false);
+      return;
+    } else {
+      removeError();
+      if (e.target.checked) setSelectedAll(true);
+
+      onSelectedPriceOptions({ number: number, price: price, amount: 1 });
+    }
   }
 
   const set = props.sets_db.get(props.match.params.id);
@@ -149,25 +131,47 @@ const SetPage = (props) => {
                   key={index}
                   option={option}
                   index={index}
-                  onSetSelectedAll={onSetSelectedAll}
+                  setSelectedAll={setSelectedAll}
                   isSelectedAll={isSelectedAll}
                   onSelectedPriceOptions={onSelectedPriceOptions}
                   selectedPriceOptions={selectedPriceOptions}
+                  removeError={removeError}
                 />
               ))}
-              <button
-                className={`btn-checkbox-label${
-                  isSelectedAll ? ' active' : ''
-                }`}
-                type="button"
-                onClick={toggleSelestedAll}
-              >
+              <input
+                className="hidden-input"
+                type="radio"
+                id="all"
+                data-price={set.price}
+                data-number="all"
+                value={set.price}
+                name="option"
+                onChange={onCheckOption}
+              />
+              <label className="price-checkbox-label wide" htmlFor="all">
                 весь набір
-              </button>
+              </label>
             </fieldset>
           )}
-          <button className="btn-primary" type="button" onClick={onSubmit}>
-            В кошик
+          {/* Input & label to clear options selectedPriceOptions */}
+          <input
+            className="hidden-input"
+            type="radio"
+            id="clear-options"
+            data-price="clear-options"
+            data-number="clear-options"
+            value="clear-options"
+            name="option"
+            onChange={onCheckOption}
+          />
+          <button
+            className="btn-primary with-out-paddigs"
+            type="button"
+            onClick={onSubmit}
+          >
+            <label htmlFor="clear-options" className="clear-option-label">
+              В кошик
+            </label>
           </button>
         </div>
       </div>

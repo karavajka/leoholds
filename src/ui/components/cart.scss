@@ -1,0 +1,68 @@
+.cart-list {
+  li {
+    @include display-flex;
+    @include align-center;
+    border-bottom: var(--border-dotted);
+    padding: 4px 0;
+
+    .nomber {
+      width: 32px;
+    }
+    .price,
+    .amount,
+    .sum,
+    .adds {
+      flex: 0 0 auto;
+      display: inline-block;
+    }
+    .item-name {
+      flex-grow: 1;
+      display: inline-block;
+      width: 120px;
+
+      a {
+        display: inline-block;
+        width: 100%;
+        font-weight: 600;
+        color: var(--color-active);
+
+        &:hover {
+          color: var(--color-active-hover);
+        }
+      }
+    }
+    .price {
+      width: 80px;
+    }
+    .amount {
+      width: 88px;
+      padding-right: 24px;
+
+      input {
+        width: 100%;
+      }
+    }
+    .sum {
+      width: 80px;
+    }
+    .adds {
+      width: 40px;
+      padding-left: 16px;
+    }
+  }
+}
+
+.total-price {
+  @include display-flex;
+  @include align-center;
+  @include justify-end;
+  height: 40px;
+
+  div {
+    width: 96px;
+    color: var(--color-dark-text);
+    font-weight: 600;
+    text-align: right;
+    padding-left: 16px;
+  }
+}

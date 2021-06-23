@@ -51,3 +51,18 @@
     }
   }
 }
+
+.total-price {
+  @include display-flex;
+  @include align-center;
+  @include justify-end;
+  height: 40px;
+
+  div {
+    width: 96px;
+    color: var(--color-dark-text);
+    font-weight: 600;
+    text-align: right;
+    padding-left: 16px;
+  }
+}

@@ -24,6 +24,12 @@
   align-items: center;
 }
 
+@mixin justify-end {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
 .display-flex {
   @include display-flex;
 }
@@ -43,10 +49,8 @@
   justify-content: flex-start;
 }
 
-.display-flex-end {
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
+.justify-end {
+  @include justify-end;
 }
 
 .flex-column {

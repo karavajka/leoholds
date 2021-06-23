@@ -34,10 +34,17 @@ const Cart = types
         ({ number }) => number !== optionNumber
       );
 
-      console.log('options:', options)
-
       self.itemsList[itemIndex].putOptions(options)
     },
+
+    updateCartItem(itemIndex, optionAmount) {
+
+      const priceOptions = self.itemsList[itemIndex].priceOptions[0]
+      const newPriceOptions = {number: priceOptions.number, price: priceOptions.price, amount: optionAmount}
+
+      self.itemsList[itemIndex].priceOptions[0] = newPriceOptions
+
+    }
 
 
   })).views(self => ({}));

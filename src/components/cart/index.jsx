@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
-const PriceOption = ({ option, removeOption, link, linkTitle }) => {
+const PriceOption = ({
+  option,
+  removeOption,
+  changeAmount,
+  link,
+  linkTitle,
+}) => {
   const [amount, setAmount] = useState(option.amount);
 
   function onRemoveOption() {
@@ -16,6 +22,7 @@ const PriceOption = ({ option, removeOption, link, linkTitle }) => {
 
   function onChange(event) {
     setAmount(event.target.value.trim());
+    changeAmount(event.target.value.trim());
   }
 
   return (
@@ -44,13 +51,13 @@ const PriceOption = ({ option, removeOption, link, linkTitle }) => {
           title="Видалити"
           onClick={onRemoveOption}
         />
-        <i class="fa-solid fa-xmark"></i>
+        <i className="fa-solid fa-xmark"></i>
       </span>
     </>
   );
 };
 
-const CartItem = ({ item, index, cart }) => {
+const CartItem = ({ item, index, cart, changeSum }) => {
   const [currentItem, setCurrentItem] = useState({});
   const [currentOptions, setcurrentOptions] = useState([]);
   console.log(item);
@@ -68,8 +75,10 @@ const CartItem = ({ item, index, cart }) => {
     setcurrentOptions(options);
   }
 
-  console.log('item.priceOptions:', item.priceOptions);
-  console.log('currentOptions:', currentOptions);
+  function changeOptionAmount(optionAmount) {
+    cart.updateCartItem(index, optionAmount);
+    changeSum();
+  }
 
   return (
     currentOptions.length > 0 && (
@@ -81,6 +90,7 @@ const CartItem = ({ item, index, cart }) => {
             key={option.number}
             option={option}
             removeOption={removeOption}
+            changeAmount={changeOptionAmount}
             link={currentItem.link}
             linkTitle={currentItem.title}
           />
@@ -113,6 +123,11 @@ const Cart = ({ cart }) => {
     setSumm(total);
   }
 
+  function changeSum() {
+    setCartItems(cart.itemsList);
+    onSetSumm();
+  }
+
   return (
     <div>
       <h1>Кошик</h1>
@@ -134,14 +149,20 @@ const Cart = ({ cart }) => {
           <div className="adds" />
         </li>
         {cartItems.map((item, index) => (
-          <CartItem key={index} index={index} item={item} cart={cart} />
+          <CartItem
+            key={index}
+            index={index}
+            item={item}
+            cart={cart}
+            changeSum={changeSum}
+          />
         ))}
       </ul>
-      <div>
+      <div className="total-price">
         <h3>
           <strong>Загальна сума: </strong>
         </h3>
-        <div>{summ}</div>
+        <div>{summ} грн.</div>
       </div>
     </div>
   );

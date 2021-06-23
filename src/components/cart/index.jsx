@@ -2,22 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
-const PriceOption = ({ option, removeOption }) => {
+const PriceOption = ({ option, removeOption, link, linkTitle }) => {
+  const [amount, setAmount] = useState(option.amount);
+
   function onRemoveOption() {
     removeOption(option);
   }
+
+  function getSum() {
+    const price = +option.price;
+    return price * amount;
+  }
+
+  function onChange(event) {
+    setAmount(event.target.value.trim());
+  }
+
   return (
-    <div>
-      <span>
-        {option.number === 'all'
-          ? 'Весь набір: '
-          : `Зачіпка №${option.number}: `}
+    <>
+      <span className="item-name">
+        {link && <Link to={link}>{linkTitle}</Link>}
+        {option.number === 'all' ? 'Весь набір' : `Зачіпка №${option.number}`}
       </span>
-      <span>{option.price}грн.</span>
-      <button type="button" onClick={onRemoveOption}>
-        Видалити
-      </button>
-    </div>
+      <span className="price">{option.price}грн.</span>
+
+      <span className="amount">
+        <input
+          type="number"
+          min="1"
+          max="50"
+          defaultValue={option.amount}
+          onChange={onChange}
+        />
+      </span>
+
+      <span className="sum">{getSum()} грн.</span>
+      <span className="adds">
+        <button
+          className="btn-delete"
+          type="button"
+          title="Видалити"
+          onClick={onRemoveOption}
+        />
+        <i class="fa-solid fa-xmark"></i>
+      </span>
+    </>
   );
 };
 
@@ -39,21 +68,23 @@ const CartItem = ({ item, index, cart }) => {
     setcurrentOptions(options);
   }
 
+  console.log('item.priceOptions:', item.priceOptions);
+  console.log('currentOptions:', currentOptions);
+
   return (
     currentOptions.length > 0 && (
       <li>
-        {currentItem.link && (
-          <Link to={currentItem.link}>{currentItem.title}</Link>
-        )}
-        <div>
-          {currentOptions.map((option) => (
-            <PriceOption
-              key={option.number}
-              option={option}
-              removeOption={removeOption}
-            />
-          ))}
-        </div>
+        <span className="nomber">{index + 1}.</span>
+
+        {currentOptions.map((option) => (
+          <PriceOption
+            key={option.number}
+            option={option}
+            removeOption={removeOption}
+            link={currentItem.link}
+            linkTitle={currentItem.title}
+          />
+        ))}
       </li>
     )
   );
@@ -85,13 +116,33 @@ const Cart = ({ cart }) => {
   return (
     <div>
       <h1>Кошик</h1>
-      <ul>
+      <ul className="cart-list">
+        <li>
+          <span className="nomber" />
+          <div className="item-name">
+            <strong>Найменування</strong>
+          </div>
+          <div className="price">
+            <strong>Ціна</strong>
+          </div>
+          <div className="amount">
+            <strong>Кількість</strong>
+          </div>
+          <div className="sum">
+            <strong>Сума</strong>
+          </div>
+          <div className="adds" />
+        </li>
         {cartItems.map((item, index) => (
           <CartItem key={index} index={index} item={item} cart={cart} />
         ))}
       </ul>
-      <h3>Сума: </h3>
-      <div>{summ}</div>
+      <div>
+        <h3>
+          <strong>Загальна сума: </strong>
+        </h3>
+        <div>{summ}</div>
+      </div>
     </div>
   );
 };

@@ -153,7 +153,7 @@ const SetPage = (props) => {
               </label>
             </fieldset>
           )}
-          {/* Input & label to clear options selectedPriceOptions */}
+          {/* Input & label to clear selectedPriceOptions */}
           <input
             className="hidden-input"
             type="radio"

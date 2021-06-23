@@ -18,6 +18,12 @@
   display: flex;
 }
 
+@mixin align-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .display-flex {
   @include display-flex;
 }
@@ -28,10 +34,8 @@
   justify-content: space-between;
 }
 
-.display-flex-center {
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.align-center {
+  @include align-center;
 }
 .display-flex-start {
   -webkit-box-pack: start;

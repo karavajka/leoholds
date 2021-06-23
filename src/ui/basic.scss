@@ -97,3 +97,23 @@ button {
     background: var(--color-active-hover);
   }
 }
+
+.btn-delete {
+  width: 24px;
+  height: 24px;
+  color: white;
+  background: var(--color-dark-text);
+  border-radius: 2px;
+
+  &::before {
+    content: '+';
+    font-size: 24px;
+    transform: rotate(45deg);
+    display: block;
+    line-height: 24px;
+  }
+
+  &:hover {
+    background: var(--color-active-hover);
+  }
+}

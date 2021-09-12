@@ -57,10 +57,9 @@ const PriceOption = ({
   );
 };
 
-const CartItem = ({ item, index, cart, changeSum }) => {
+const CartItem = ({ item, index, cart, changeSum, removeItem }) => {
   const [currentItem, setCurrentItem] = useState({});
   const [currentOptions, setcurrentOptions] = useState([]);
-  console.log(item);
 
   useEffect(() => {
     setCurrentItem(item);
@@ -68,22 +67,18 @@ const CartItem = ({ item, index, cart, changeSum }) => {
   }, [item]);
 
   function removeOption(option) {
-    cart.deleteFromCart(index, option.number);
-    const options = currentOptions.filter(
-      (item) => item.number !== option.number
-    );
-    setcurrentOptions(options);
+    removeItem(item.action_id);
   }
 
   function changeOptionAmount(optionAmount) {
-    cart.updateCartItem(index, optionAmount);
+    cart.updateCartItem(item.action_id, optionAmount);
     changeSum();
   }
 
   return (
     currentOptions.length > 0 && (
       <li>
-        <span className="nomber">{index + 1}.</span>
+        <span className="number">{index + 1}.</span>
 
         {currentOptions.map((option) => (
           <PriceOption
@@ -105,11 +100,14 @@ const Cart = ({ cart }) => {
   const [summ, setSumm] = useState(0);
 
   useEffect(() => {
-    if (cart.itemsList.length > 0) {
-      setCartItems(cart.itemsList);
-      onSetSumm();
-    }
-  }, [cart.itemsList]); // eslint-disable-line
+    setCartItems(cart.itemsList);
+    if (cartItems.length > 0) onSetSumm();
+  }, [cart.itemsList, summ, cartItems.length]); // eslint-disable-line
+
+  function removeItem(actionId) {
+    cart.deleteFromCart(actionId);
+    changeSum();
+  }
 
   function onSetSumm() {
     let total = 0;
@@ -119,7 +117,7 @@ const Cart = ({ cart }) => {
         total = total + optionPrice;
       })
     );
-    console.log(total);
+
     setSumm(total);
   }
 
@@ -133,7 +131,7 @@ const Cart = ({ cart }) => {
       <h1>Кошик</h1>
       <ul className="cart-list">
         <li>
-          <span className="nomber" />
+          <span className="number" />
           <div className="item-name">
             <strong>Найменування</strong>
           </div>
@@ -148,15 +146,17 @@ const Cart = ({ cart }) => {
           </div>
           <div className="adds" />
         </li>
-        {cartItems.map((item, index) => (
-          <CartItem
-            key={index}
-            index={index}
-            item={item}
-            cart={cart}
-            changeSum={changeSum}
-          />
-        ))}
+        {cartItems.length > 0 &&
+          cartItems.map((item, index) => (
+            <CartItem
+              key={item.action_id}
+              item={item}
+              index={index}
+              cart={cart}
+              changeSum={changeSum}
+              removeItem={removeItem}
+            />
+          ))}
       </ul>
       <div className="total-price">
         <h3>

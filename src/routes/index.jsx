@@ -14,7 +14,7 @@ const Routes = () => (
       <Route exact path={ROUTES.root} component={Page} />
       <Route exact path={ROUTES.collectionPage} component={Collection} />
       <Route exact path={ROUTES.setPage} component={SetPage} />
-      <Route exact path={ROUTES.checkout} component={Cart} />
+      <Route exact path={ROUTES.cart} component={Cart} />
     </Switch>
   </Layout>
 );

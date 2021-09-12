@@ -1,23 +1,24 @@
-import React, { useEffect } from "react";
-import { withRouter, matchPath } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { withRouter, matchPath } from 'react-router-dom';
 
 import Routes from './routes';
-import { ROUTES} from "./utils/constants";
-import * as mountApi from "./routes/routerApiMount";
-import * as unmountApi from "./routes/routerApiUnmount";
+import { ROUTES } from './utils/constants';
+import * as mountApi from './routes/routerApiMount';
+import * as unmountApi from './routes/routerApiUnmount';
 
 const route = (pathname, loader, exact = false) => [
   {
     path: pathname,
-    exact
+    exact,
   },
-  loader
+  loader,
 ];
 
 const routes = [
   route(ROUTES.setPage, mountApi.getSetPage),
   route(ROUTES.collectionPage, mountApi.getCollectionPage),
-]
+  route(ROUTES.cart, mountApi.getCart),
+];
 
 const App = ({ history, stores }) => {
   function mount() {
@@ -35,7 +36,7 @@ const App = ({ history, stores }) => {
 
   useEffect(mount, [mount]);
 
-  return <Routes />
-}
+  return <Routes />;
+};
 
 export default withRouter(App);

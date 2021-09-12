@@ -10,10 +10,8 @@ const Header = ({ cart }) => {
   const [catrItemsCount, setCartItems] = useState(0);
 
   useEffect(() => {
-    if (cart.itemsList.length > 0) {
-      setCartItems(cart.itemsList.length);
-    }
-  }, [cart.itemsList, cart.itemsList.length]);
+    setCartItems(cart.itemsList.length);
+  }, [cart.itemsList.length]);
 
   return (
     <>

@@ -33,13 +33,9 @@ const Cart = types
     },
 
     putToCart(items: array) {
-      self.isLoading = true;
-
       items.forEach((item) => {
         self.addToCart(item);
       });
-
-      self.isLoading = false;
     },
 
     addToCart(item: typeof Item) {
@@ -61,21 +57,27 @@ const Cart = types
       self.addToLocalStorage();
     },
 
-    updateCartItem(itemIndex, optionAmount) {
-      const priceOptions = self.itemsList[itemIndex].priceOptions[0];
-      const newPriceOptions = {
-        number: priceOptions.number,
-        price: priceOptions.price,
-        amount: optionAmount,
-      };
+    updateCartItem(actionId, optionAmount) {
+      const existingItem = self.itemsList.find(
+        ({ action_id }) => action_id === actionId
+      );
 
-      self.itemsList[itemIndex].priceOptions[0] = newPriceOptions;
-      self.addToLocalStorage();
-    },
+      if (existingItem) {
+        const priceOptions = existingItem.priceOptions[0];
 
-    clearCart() {
-      localStorage.setItem('leoholds_cart', '');
-      localStorage.setItem('leoholds_cart_items', 0);
+        const newPriceOptions = {
+          number: priceOptions.number,
+          price: priceOptions.price,
+          amount: optionAmount,
+        };
+
+        const index = self.itemsList.indexOf(existingItem);
+
+        if (index !== -1) {
+          self.itemsList[index].priceOptions[0] = newPriceOptions;
+          self.addToLocalStorage();
+        }
+      }
     },
   }))
   .views((self) => ({}));

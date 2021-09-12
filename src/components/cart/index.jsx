@@ -60,7 +60,6 @@ const PriceOption = ({
 const CartItem = ({ item, index, cart, changeSum, removeItem }) => {
   const [currentItem, setCurrentItem] = useState({});
   const [currentOptions, setcurrentOptions] = useState([]);
-  console.log(item);
 
   useEffect(() => {
     setCurrentItem(item);
@@ -69,21 +68,17 @@ const CartItem = ({ item, index, cart, changeSum, removeItem }) => {
 
   function removeOption(option) {
     removeItem(item.action_id);
-    const options = currentOptions.filter(
-      (item) => item.number !== option.number
-    );
-    setcurrentOptions(options);
   }
 
   function changeOptionAmount(optionAmount) {
-    cart.updateCartItem(index, optionAmount);
+    cart.updateCartItem(item.action_id, optionAmount);
     changeSum();
   }
 
   return (
     currentOptions.length > 0 && (
       <li>
-        <span className="nomber">{index + 1}.</span>
+        <span className="number">{index + 1}.</span>
 
         {currentOptions.map((option) => (
           <PriceOption
@@ -105,11 +100,9 @@ const Cart = ({ cart }) => {
   const [summ, setSumm] = useState(0);
 
   useEffect(() => {
-    if (!cart.isLoading) {
-      setCartItems(cart.itemsList);
-      onSetSumm();
-    }
-  }, [cart.itemsList, cart.isLoading, summ]); // eslint-disable-line
+    setCartItems(cart.itemsList);
+    if (cartItems.length > 0) onSetSumm();
+  }, [cart.itemsList, summ, cartItems.length]); // eslint-disable-line
 
   function removeItem(actionId) {
     cart.deleteFromCart(actionId);
@@ -118,16 +111,14 @@ const Cart = ({ cart }) => {
 
   function onSetSumm() {
     let total = 0;
-    if (cart.itemsList.length > 0) {
-      cart.itemsList.map((item) =>
-        item.priceOptions.forEach((option) => {
-          let optionPrice = +option.price * option.amount;
-          total = total + optionPrice;
-        })
-      );
+    cart.itemsList.map((item) =>
+      item.priceOptions.forEach((option) => {
+        let optionPrice = +option.price * option.amount;
+        total = total + optionPrice;
+      })
+    );
 
-      setSumm(total);
-    }
+    setSumm(total);
   }
 
   function changeSum() {
@@ -135,18 +126,12 @@ const Cart = ({ cart }) => {
     onSetSumm();
   }
 
-  // function clearCart() {
-  //   cart.clearCart();
-  // }
-
-  if (cart.isLoading) return <div className="loader" />;
-
   return (
     <div>
       <h1>Кошик</h1>
       <ul className="cart-list">
         <li>
-          <span className="nomber" />
+          <span className="number" />
           <div className="item-name">
             <strong>Найменування</strong>
           </div>
@@ -164,9 +149,9 @@ const Cart = ({ cart }) => {
         {cartItems.length > 0 &&
           cartItems.map((item, index) => (
             <CartItem
-              key={index}
-              index={index}
+              key={item.action_id}
               item={item}
+              index={index}
               cart={cart}
               changeSum={changeSum}
               removeItem={removeItem}
@@ -179,9 +164,6 @@ const Cart = ({ cart }) => {
         </h3>
         <div>{summ} грн.</div>
       </div>
-      {/* <button type="button" onClick={clearCart}>
-        Почистити кошик
-      </button> */}
     </div>
   );
 };

@@ -71,6 +71,8 @@ const SetPage = (props) => {
       ? { number: 'all', price: set.price, amount: 1 }
       : selectedPriceOptions;
 
+    const action_id = Math.floor(Math.random() * 10000);
+
     if (priceOptions.number) {
       const data = {
         id: set.id,
@@ -78,6 +80,7 @@ const SetPage = (props) => {
         image: set.imagesCollection.items[0].url,
         link: link,
         title: set.title,
+        action_id,
       };
 
       props.cart.addToCart(data);

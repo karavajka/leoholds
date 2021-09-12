@@ -57,7 +57,7 @@ const PriceOption = ({
   );
 };
 
-const CartItem = ({ item, index, cart, changeSum }) => {
+const CartItem = ({ item, index, cart, changeSum, removeItem }) => {
   const [currentItem, setCurrentItem] = useState({});
   const [currentOptions, setcurrentOptions] = useState([]);
   console.log(item);
@@ -68,7 +68,7 @@ const CartItem = ({ item, index, cart, changeSum }) => {
   }, [item]);
 
   function removeOption(option) {
-    cart.deleteFromCart(index, option.number);
+    removeItem(item.action_id);
     const options = currentOptions.filter(
       (item) => item.number !== option.number
     );
@@ -105,28 +105,41 @@ const Cart = ({ cart }) => {
   const [summ, setSumm] = useState(0);
 
   useEffect(() => {
-    if (cart.itemsList.length > 0) {
+    if (!cart.isLoading) {
       setCartItems(cart.itemsList);
       onSetSumm();
     }
-  }, [cart.itemsList]); // eslint-disable-line
+  }, [cart.itemsList, cart.isLoading, summ]); // eslint-disable-line
+
+  function removeItem(actionId) {
+    cart.deleteFromCart(actionId);
+    changeSum();
+  }
 
   function onSetSumm() {
     let total = 0;
-    cart.itemsList.map((item) =>
-      item.priceOptions.forEach((option) => {
-        let optionPrice = +option.price * option.amount;
-        total = total + optionPrice;
-      })
-    );
-    console.log(total);
-    setSumm(total);
+    if (cart.itemsList.length > 0) {
+      cart.itemsList.map((item) =>
+        item.priceOptions.forEach((option) => {
+          let optionPrice = +option.price * option.amount;
+          total = total + optionPrice;
+        })
+      );
+
+      setSumm(total);
+    }
   }
 
   function changeSum() {
     setCartItems(cart.itemsList);
     onSetSumm();
   }
+
+  // function clearCart() {
+  //   cart.clearCart();
+  // }
+
+  if (cart.isLoading) return <div className="loader" />;
 
   return (
     <div>
@@ -148,15 +161,17 @@ const Cart = ({ cart }) => {
           </div>
           <div className="adds" />
         </li>
-        {cartItems.map((item, index) => (
-          <CartItem
-            key={index}
-            index={index}
-            item={item}
-            cart={cart}
-            changeSum={changeSum}
-          />
-        ))}
+        {cartItems.length > 0 &&
+          cartItems.map((item, index) => (
+            <CartItem
+              key={index}
+              index={index}
+              item={item}
+              cart={cart}
+              changeSum={changeSum}
+              removeItem={removeItem}
+            />
+          ))}
       </ul>
       <div className="total-price">
         <h3>
@@ -164,6 +179,9 @@ const Cart = ({ cart }) => {
         </h3>
         <div>{summ} грн.</div>
       </div>
+      {/* <button type="button" onClick={clearCart}>
+        Почистити кошик
+      </button> */}
     </div>
   );
 };

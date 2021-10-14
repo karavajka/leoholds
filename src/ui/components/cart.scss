@@ -1,3 +1,6 @@
+@import '../variables.scss';
+@import '../utils.scss';
+
 .cart-list {
   li {
     @include display-flex;
@@ -64,5 +67,12 @@
     font-weight: 600;
     text-align: right;
     padding-left: 16px;
+  }
+}
+
+.input-group {
+  label {
+    display: block;
+    padding: 8px 0;
   }
 }

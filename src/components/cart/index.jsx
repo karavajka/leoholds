@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
+import '../../ui/components/cart.scss';
+import Form from './Form';
+
 const PriceOption = ({
   option,
   removeOption,
@@ -164,6 +167,7 @@ const Cart = ({ cart }) => {
         </h3>
         <div>{summ} грн.</div>
       </div>
+      <Form cartItems={cartItems} summ={summ} />
     </div>
   );
 };
